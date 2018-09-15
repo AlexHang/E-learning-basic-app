@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!--Angular JS-->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	  <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+    <script type="text/javascript">
+    	
+
+        const storage = window.localStorage;
+        //let ind_order = storage.getItem("index") || 0;
+        let user = storage.getItem("user") || undefined;
+        var r1=r2=r3=r4=r5=r6=r7=r8=r9=r10=0; 
+        var suma = 0;
+    	var app = angular.module("app",[]);
+    	app.controller("myCtrl", function($scope,$http){
+
+    		$scope.loadURL = function(url){
+    			window.location = url;
+    		};
+
+    		$http.get("https://proiectexemplu.000webhostapp.com/Lessons/API/Quiz1.php")
+		    .then(function(response) {
+		    	console.log(response.data);
+		        $scope.result = response.data;
+		        
+		        //$scope.result = [{"ID":"2","Nume":"Variabile","Capitol":"1","Nr":"1","URL":"https:\/\/proiectexemplu.000webhostapp.com\/Lessons\/PDFs\/inspiron-17-5767-laptop_setup guide_en-us.pdf"}];
+		    });
+
+            $scope.corect = function(nr){
+                switch(nr) {
+                                        case 0:
+                                            r1 = 1;
+                                            break;
+                                        case 1:
+                                            r2 = 1;
+                                            break;
+                                        case 2:
+                                            r3 = 1;
+                                            break;
+                                        case 3:
+                                            r4 = 1;
+                                            break;
+                                        case 4:
+                                            r5 = 1;
+                                            break;
+                                        case 5: 
+                                            r6 = 1;
+                                            break;
+                                        case 6:
+                                            r7 = 1;
+                                            break;
+                                        case 7:
+                                            r8 = 1;
+                                            break;
+                                        case 8:
+                                            r9 = 1;
+                                            break;
+                                        case 9:
+                                            r10 = 1;
+                                            break;
+                                    }
+            };
+
+              $scope.gresit = function(nr){
+                switch(nr) {
+                                        case 0:
+                                            r1 = 0;
+                                            break;
+                                        case 1:
+                                            r2 = 0;
+                                            break;
+                                        case 2:
+                                            r3 = 0;
+                                            break;
+                                        case 3:
+                                            r4 = 0;
+                                            break;
+                                        case 4:
+                                            r5 = 0;
+                                            break;
+                                        case 5: 
+                                            r6 = 0;
+                                            break;
+                                        case 6:
+                                            r7 = 0;
+                                            break;
+                                        case 7:
+                                            r8 = 0;
+                                            break;
+                                        case 8:
+                                            r9 = 0;
+                                            break;
+                                        case 9:
+                                            r10 = 0;
+                                            break;
+                                    }
+            };
+
+            $scope.verifica = function(){
+                suma = r1+r2+r3+r4+r5+r6+r7+r8+r9+r10;
+                if(suma/10 > 0.75)
+                {
+                    $http.get("https://proiectexemplu.000webhostapp.com/Lessons/API/scor1.php?Username="+user+"&rezultat="+(suma/10)*100)
+                      .then(function(response) {
+                          console.log(response.data);
+                      });
+
+                    window.alert("felicitari, ati trecut acest examen, rezultatul dvs este "+(suma/10)*100 + " puncte");
+                    window.history.back();
+                }
+                else {
+
+                    window.alert("ne pare rau,nu ati trecut acest rezultatul dvs este "+ (suma/10)*100 + " puncte");
+                    window.history.back();
+                }
+
+            }
+
+    	});
+
+
+    </script>
+</head>
+<body ng-app="app" ng-controller="myCtrl">
+    <center>
+        <h1>Examen Capitolul 1</h1>
+         <p>Fiecare Quiz este format din 10 intrebari. Pentru a-l promova, trebuie sa obtineti minim 75% 
+            <br>
+            Fiecare intrebare are un singur raspuns corect !!
+            <br>
+            Succes
+        </p>
+    </center>
+	 <div ng-repeat="x in result track by $index">
+        <p>{{x.Intrebare}}</p>
+        <p ng-if-start="x.corect == 1">
+          <label>
+            <input name="{{x.ID}}" type="radio" value="1" ng-click="corect($index)"/>
+            <span>{{x.raspuns1}}</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input  name="{{x.ID}}" type="radio" value="2" ng-click="gresit($index)"/>
+            <span>{{x.raspuns2}}</span>
+          </label>
+        </p>
+        <p ng-if-end>
+          <label>
+            <input name="{{x.ID}}" type="radio" value="3" ng-click="gresit($index)"/>
+            <span>{{x.raspuns3}}</span>
+          </label>
+        </p>  
+
+
+        <p ng-if-start="x.corect == 2">
+          <label>
+            <input name="{{x.ID}}" type="radio" value="1" ng-click="gresit($index)"/>
+            <span>{{x.raspuns1}}</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input  name="{{x.ID}}" type="radio" value="2" ng-click="corect($index)"/>
+            <span>{{x.raspuns2}}</span>
+          </label>
+        </p>
+        <p ng-if-end>
+          <label>
+            <input name="{{x.ID}}" type="radio" value="3" ng-click="gresit($index)"/>
+            <span>{{x.raspuns3}}</span>
+          </label>
+        </p>
+
+        <p ng-if-start="x.corect == 3">
+          <label>
+            <input name="{{x.ID}}" type="radio" value="1" ng-click="gresit($index)"/>
+            <span>{{x.raspuns1}}</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input  name="{{x.ID}}" type="radio" value="2" ng-click="gresit($index)"/>
+            <span>{{x.raspuns2}}</span>
+          </label>
+        </p>
+        <p ng-if-end>
+          <label>
+            <input name="{{x.ID}}" type="radio" value="3" ng-click="corect($index)" />
+            <span>{{x.raspuns3}}</span>
+          </label>
+        </p >
+
+     </div>
+
+     <center>
+         <button class="btn waves-effect waves-light" ng-click="verifica()" name="action">Submit
+    <i class="material-icons right">send</i>
+  </button
+     </center>
+</body>
+</html>

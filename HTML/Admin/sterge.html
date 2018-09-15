@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!--Angular JS-->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	  <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+
+<script type="text/javascript">
+	var app = angular.module("app",[]);
+    	app.controller("myCtrl", function($scope,$http){
+			$http.get("https://proiectexemplu.000webhostapp.com/Lessons/API/GetList.php?Capitol=1")
+				    .then(function(response) {
+				    	console.log(response.data);
+				        $scope.quiz1 = response.data;
+				        
+				        //$scope.result = [{"ID":"2","Nume":"Variabile","Capitol":"1","Nr":"1","URL":"https:\/\/proiectexemplu.000webhostapp.com\/Lessons\/PDFs\/inspiron-17-5767-laptop_setup guide_en-us.pdf"}];
+				    });
+      $http.get("https://proiectexemplu.000webhostapp.com/Lessons/API/GetList.php?Capitol=2")
+            .then(function(response) {
+              console.log(response.data);
+                $scope.quiz2 = response.data;
+                
+                //$scope.result = [{"ID":"2","Nume":"Variabile","Capitol":"1","Nr":"1","URL":"https:\/\/proiectexemplu.000webhostapp.com\/Lessons\/PDFs\/inspiron-17-5767-laptop_setup guide_en-us.pdf"}];
+            });
+
+      $scope.deletequestion=function(question_id){
+
+          var r = confirm("Are you sure you want to delete this lesson ?");
+          if (r == true) {
+             $http.get("https://proiectexemplu.000webhostapp.com/Lessons/API/deletelesson.php?id="+question_id)
+            .then(function(response) {
+              window.alert(response.data);
+                location.reload();
+                //$scope.result = [{"ID":"2","Nume":"Variabile","Capitol":"1","Nr":"1","URL":"https:\/\/proiectexemplu.000webhostapp.com\/Lessons\/PDFs\/inspiron-17-5767-laptop_setup guide_en-us.pdf"}];
+            });
+          }
+              
+      }
+
+
+				});
+
+</script>
+
+</head>
+<body ng-app="app" ng-controller="myCtrl">
+
+		<div style="width: 100%; height: 50px;">
+			
+		</div>
+
+		<ul class="collection with-header">
+        <li class="collection-header"><h4>Resurse Capitolul 1</h4></li>
+        <li ng-repeat="x in quiz1" class="collection-item"><div>{{x.Nr+'. '+x.Nume}}<a ng-click="deletequestion(x.ID)" href="#!" class="secondary-content"><i class="material-icons">delete</i></a></div></li>
+      </ul>
+
+
+      <ul class="collection with-header">
+        <li class="collection-header"><h4>Resurse Capitolul 2</h4></li>
+        <li ng-repeat="y in quiz2" class="collection-item"><div>{{y.Nr+'. '+y.Nume}}<a ng-click="deletequestion(y.ID)" href="#!" class="secondary-content"><i class="material-icons">delete</i></a></div></li>
+      </ul>
+	
+	 
+</body>
+</html>
