@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!--Angular JS-->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	  <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+    <script type="text/javascript">
+    	
+    	var app = angular.module("app",[]);
+    	app.controller("myCtrl", function($scope,$http){
+
+    		$scope.loadURL = function(url){
+    			window.location = url;
+    		};
+
+    		$http.get("https://proiectexemplu.000webhostapp.com/Lessons/API/GetList.php?Capitol=1")
+		    .then(function(response) {
+		    	console.log(response.data);
+		        $scope.result = response.data;
+		        
+		        //$scope.result = [{"ID":"2","Nume":"Variabile","Capitol":"1","Nr":"1","URL":"https:\/\/proiectexemplu.000webhostapp.com\/Lessons\/PDFs\/inspiron-17-5767-laptop_setup guide_en-us.pdf"}];
+		    });
+
+    	});
+    </script>
+</head>
+<body ng-app="app" ng-controller="myCtrl">
+	 <ul class="collection with-header">
+        <li class="collection-header"><h4>Capitolul 1</h4></li>
+        <li ng-click="loadURL(x.URL)" ng-repeat="x in result track by $index" class="collection-item">
+        	<div>
+        		{{$index+1}}. {{x.Nume}}
+        		<a href="#!" class="secondary-content">
+        			<i class="material-icons">send</i>
+        		</a>
+        	</div>
+        </li>
+        <a href="Quiz1.html">
+	        <li class="collection-item">
+	        	<div>
+	        		Examen de final pentru capitolul 1
+	        		<a href="#!" class="secondary-content">
+	        			<i class="material-icons">send</i>
+	        		</a>
+	        	</div>
+	        </li>
+	    </a>
+      </ul>
+</body>
+</html>

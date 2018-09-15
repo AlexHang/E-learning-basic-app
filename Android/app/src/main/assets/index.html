@@ -1,0 +1,211 @@
+<html>
+
+<head>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+  <style>
+    body
+{
+  background: #f5f5f5;
+}
+
+h5
+{
+  font-weight: 400;
+}
+
+.container
+{
+  margin-top: 80px;
+  width: 400px;
+  height: 700px;
+}
+
+.tabs .indicator
+{
+  background-color: #e0f2f1;
+  height: 60px;
+  opacity: 0.3;
+}
+
+.form-container
+{
+  padding: 40px;
+  padding-top: 10px;
+}
+
+.confirmation-tabs-btn
+{
+  position: absolute;
+}
+  </style>
+
+
+
+</head>
+
+<body>
+  <div class="section"></div>
+  <div class="container white z-depth-2">
+  <ul class="tabs teal">
+    <li class="tab col s3"><a class="white-text active" href="#login">Conectare</a></li>
+    <li class="tab col s3"><a class="white-text" href="#register">Inregistrare</a></li>
+  </ul>
+  <div id="login" class="col s12">
+    <div class="col s12">
+      <div class="form-container">
+        <h3 class="teal-text">Log In</h3>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="email" type="text" name="Username" class="validate">
+            <label for="email">Nume de utilizator</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="password" type="password" name="Password" class="validate">
+            <label for="password">Parola</label>
+          </div>
+        </div>
+        <br>
+        <center>
+          <button class="btn waves-effect waves-light teal" onclick="login()" type="submit" name="action">Connect</button>
+          <br>
+          <br>
+          <a href="">Ai uitat parola ?</a>
+        </center>
+      </div>
+    </div>
+  </div>
+  <div id="register" class="col s12">
+    <div class="col s12">
+      <div class="form-container">
+        <h3 class="teal-text">Register</h3>
+        <!-- 
+        <div class="row">
+          <div class="input-field col s6">
+            <input id="last_name" type="text" class="validate">
+            <label for="last_name">First Name</label>
+          </div>
+          <div class="input-field col s6">
+            <input id="last_name" type="text" class="validate">
+            <label for="last_name">Last Name</label>
+          </div>
+        </div> -->
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="email_sign" type="email" name="Username" class="validate">
+            <label for="email">Email</label>
+          </div>
+        </div>
+        <!--
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="email-confirm" type="email" class="validate">
+            <label for="email-confirm">Email Confirmation</label>
+          </div>
+        </div>
+      -->
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="password_sign" type="password" name="Password" class="validate">
+            <label for="password">Parola</label>
+          </div>
+        </div>
+        <!--
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="password-confirm" type="password" class="validate">
+            <label for="password-confirm">Password Confirmation</label>
+          </div>
+        </div>-->
+        <center>
+          <button class="btn waves-effect waves-light teal" type="submit" onclick="signup()" name="action">Submit</button>
+        </center>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+  <script type="text/javascript">
+    const storage = window.localStorage;
+    //let ind_order = storage.getItem("index") || 0;
+    let user = storage.getItem("user");
+   // let user = JSON.parse(value) || undefined;
+   // window.alert(username);
+    if(user!=undefined)
+    {
+      if (user == admin) {
+        window.location = "Admin/index.html";
+        storage.setItem("user", user);
+      }
+
+      else {
+         window.location = "Client/index.html";
+         storage.setItem("user", user);
+      }
+
+    }
+
+    function login(){
+      //window.alert("hello");
+      $.ajax("https://proiectexemplu.000webhostapp.com/Lessons/API/LogIn.php", 
+        { data: { "Username":document.getElementById('email').value, "Password": document.getElementById('password').value },
+          type: "POST",
+          beforeSend: function() {
+              // alert("before send");
+          },
+          error: function() {
+              alert("error ! Check connection"); 
+          },
+          success: function(data) {
+              alert(data);    
+              if(data == "admin")
+              {
+                storage.setItem("user", "admin");
+                window.location = "Admin/index.html";
+              }
+              else if (data!=undefined && data!='undefined') {
+                storage.setItem("user", data);
+                window.location = "Client/index.html";
+              }
+
+                  else {
+                    window.alert("wrong username or password");
+                  }
+          }
+      });
+    }
+
+    function signup(){
+     // window.alert("hello");
+      $.ajax("https://proiectexemplu.000webhostapp.com/Lessons/API/SignUp.php", 
+        { data: { "Username":document.getElementById('email_sign').value, "Password": document.getElementById('password_sign').value },
+          type: "POST",
+          beforeSend: function() {
+              alert("before send");
+          },
+          error: function() {
+              alert("error"); 
+          },
+          success: function(data) {
+              alert(data);    
+              if(data.match(/error/g))
+              {
+                window.alert(data)
+              }
+              else if (data!=undefined) {
+                window.alert("success");
+                location.reload();
+
+              }
+          }
+      });
+    }
+
+  </script>
+</body>
+
+</html>

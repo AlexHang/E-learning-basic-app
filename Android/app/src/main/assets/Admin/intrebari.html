@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!--Angular JS-->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	  <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+
+    <script type="text/javascript">
+    	var app = angular.module("app",[]);
+    	app.controller("myCtrl", function($scope,$http){
+			$http.get("https://proiectexemplu.000webhostapp.com/Lessons/API/allQuiz.php?nr=1")
+				    .then(function(response) {
+				    	console.log(response.data);
+				        $scope.quiz1 = response.data;
+				    });
+
+			$http.get("https://proiectexemplu.000webhostapp.com/Lessons/API/allQuiz.php?nr=2")
+				    .then(function(response) {
+				    	console.log(response.data);
+				        $scope.quiz2 = response.data;
+				    });
+
+			$scope.deletequestion1 = function(nr){
+				$http.get("https://proiectexemplu.000webhostapp.com/Lessons/API/deletequestion.php?quiz=1&id="+nr)
+				    .then(function(response) {
+				    	window.alert(response.data);    
+				    	location.reload();
+				    });
+			}
+
+			$scope.deletequestion2 = function(nr){
+				$http.get("https://proiectexemplu.000webhostapp.com/Lessons/API/deletequestion.php?quiz=2&id="+nr)
+				    .then(function(response) {
+				    	window.alert(response.data);   
+				    	location.reload(); 
+				    });
+			}
+
+		});
+    </script>
+
+</head>
+
+
+<body ng-app="app" ng-controller="myCtrl" >
+	<center>
+		
+	
+		<div style="width: 100%; height: 50px;">
+			
+		</div>
+
+		<form id="data" style="margin-left: 10%; margin-right: 10%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"
+		 method="post" enctype="multipart/form-data">
+
+			 
+<br>
+			  <select class="browser-default" name="quiz"  >
+			    <option value="" disabled selected>Alege examenul</option>
+			    <option value="1">Examenul 1</option>
+			    <option value="2">Examenul 2</option>
+			  </select>
+
+	         <div class="input-field col s6">
+	          <input id="lesson_name" type="text" name="Question" class="validate">
+	          <label for="lesson_name">Intrebarea </label>
+	         </div>
+
+	         <div class="input-field col s6">
+	          <input id="a1" type="text" name="a1" class="validate">
+	          <label for="a1">Raspunsul #1</label>
+	        </div>
+
+	        <div class="input-field col s6">
+	          <input id="a2" type="text" name="a2" class="validate">
+	          <label for="a2">Raspunsul #2</label>
+	        </div>
+
+	        <div class="input-field col s6">
+	          <input id="a3" type="text" name="a3" class="validate">
+	          <label for="a3">Raspunsul #3</label>
+	        </div>
+
+	        <select class="browser-default" name="corect" >
+			    <option value="" disabled selected>Alege raspunsul corect</option>
+			    <option value="1">1</option>
+			    <option value="2">2</option>
+			    <option value="3">3</option>
+			  </select>
+		    <br>
+		   	<button class="btn waves-effect waves-light" type="submit" name="action">Submit
+				<i class="material-icons right">send</i>
+			</button>
+			<p><br></p>
+		  </form>
+
+		  <div class="col s12 l12 m12s">
+		    <h4>Intrebarile din examenul 1</h4>
+		    <ul class="collapsible">
+			    <li ng-repeat="x in quiz1" >
+			      <div class="collapsible-header">{{x.Intrebare}}</div>
+			      <div class="collapsible-body"><span>
+			      	<p style="text-align: right; color: red;"><i ng-click="deletequestion1(x.ID)" class="material-icons">delete_sweep</i></p>
+			      	<ol>
+			      		<li>{{x.raspuns1}}</li>
+			      		<li>{{x.raspuns2}}</li>
+			      		<li>{{x.raspuns3}}</li>
+			      	</ol>
+			      	<p style="color: green"> raspuns corect: {{x.corect}}</p>
+			      </span></div>
+			    </li>
+			  </ul>
+			  <br>
+
+		    <h4>Intrebarile din examenul 2</h4>
+		    <ul class="collapsible">
+			    <li ng-repeat="x in quiz2" >
+			      <div class="collapsible-header">{{x.Intrebare}}</div>
+			      <div class="collapsible-body"><span>
+			      	<p style="text-align: right; color: red;"><i ng-click="deletequestion2(x.ID)" class="material-icons">delete_sweep</i></p>
+			      	<ol>
+			      		<li>{{x.raspuns1}}</li>
+			      		<li>{{x.raspuns2}}</li>
+			      		<li>{{x.raspuns3}}</li>
+			      	</ol>
+			      	<p style="color: green"> raspuns corect: {{x.corect}}</p>
+			      </span></div>
+			    </li>
+			  </ul>
+		  </div>
+
+		  <script type="text/javascript">
+		  	$("form#data").submit(function(e) {
+			    e.preventDefault();    
+			    var formData = new FormData(this);
+
+			    $.ajax({
+			        url: "https://proiectexemplu.000webhostapp.com/Lessons/API/addquestion.php",
+			        type: 'POST',
+			        data: formData,
+			        success: function (data) {
+			        	window.alert("Question uploaded successfuly !")
+			        	location.reload();
+			            if(data == '1')
+			            {
+			            	   // window.history.back();
+			            	   
+
+			            }
+			        },
+			        cache: false,
+			        contentType: false,
+			        processData: false
+			    });
+			});
+			M.AutoInit();
+		  </script>
+
+	</center>
+</body>
+</html>

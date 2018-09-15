@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!--Angular JS-->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	  <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl" >
+	<center>
+		<div style="width: 100%; height: 50px;">
+			
+		</div>
+		<h1>SmartLearn</h1>
+		<a href="Capitol1.html" class="waves-effect waves-light btn-large">Modulul 1</a>
+		<a ng-if="capitol_unlock=='true'" href="Capitol2.html" class="waves-effect waves-light btn-large">Modulul 2</a>
+		<br>
+		<p ng-if="capitol_unlock!='true'">Obtine peste 75% la testul de la finalul capitolului 1, pentru a accesa capitolul 2</p>
+	</center>
+	 <script type="text/javascript">
+	 
+	 	const storage = window.localStorage;
+	    //let ind_order = storage.getItem("index") || 0;
+	    let user = storage.getItem("user");
+
+		var app = angular.module("myApp", []);
+		// window.alert(user);
+		app.controller("myCtrl", function($scope, $http) {
+		    $http({
+			        method : "GET",
+			        url : "https://proiectexemplu.000webhostapp.com/Lessons/API/capitol_unlock.php?Username="+user,
+			    }).then(function mySuccess(response) {
+			        $scope.capitol_unlock = response.data;
+			        console.log($scope.capitol_unlock);
+			    }, function myError(response) {
+			        console.log(response);
+			    });
+		});
+	 </script>
+</body>
+</html>
